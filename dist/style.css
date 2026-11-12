@@ -226,11 +226,19 @@ dialog::backdrop { background: #28231672; }
   .regional-map { height: 280px; }
   .footer { flex-wrap: wrap; }
 }
+@media (max-width: 480px) {
+  .masthead-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "brand actions" "mode mode";
+    padding-block: 8px;
+  }
+  .brand { grid-area: brand; font-size: 26px; }
+  .header-actions { grid-area: actions; }
+  .header-actions .icon-button { width: 39px; height: 39px; }
+  .mode-switch { grid-area: mode; justify-self: center; }
+  .mode-switch button { min-width: 85px; min-height: 35px; }
+}
 @media (max-width: 375px) {
-  .masthead-inner { padding-inline: 8px; gap: 4px; }
-  .brand { font-size: 24px; }
-  .brand img { width: 24px; height: 24px; }
-  .header-actions .icon-button { width: 28px; }
   .choices { grid-template-columns: 1fr; }
   .choices.symbols { grid-template-columns: 1fr 1fr; }
 }
