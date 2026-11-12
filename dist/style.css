@@ -247,8 +247,26 @@ dialog::backdrop { background: #28231672; }
 .flags .choice, .seals .choice, .photos .choice { position: relative; }
 .flag-banner { display: grid; place-items: center; width: clamp(46px, 8vw, 71px); aspect-ratio: 7 / 5; background: var(--banner); color: #fff5dc; border-radius: 3px; font-family: Georgia, "Songti SC", serif; font-size: 26px; font-weight: 750; box-shadow: 0 2px 4px #28180e35; outline: 1px solid #fff1d894; outline-offset: -4px; }
 .capital-seal { display: grid; place-items: center; width: 58px; height: 58px; border: 3px double #963f2f; border-radius: 11px; color: #963f2f; font-family: Georgia, "Songti SC", serif; font-size: 19px; font-weight: 750; line-height: 1; text-align: center; }
-.photos .choice { overflow: hidden; min-height: 0; padding: 3px; }
+.photos .choice { overflow: hidden; min-height: 0; padding: 4px; border-width: 2px; }
 .photos .choice img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 5px; }
+.photos .choice[aria-pressed="true"]:not(:disabled) {
+  border-color: var(--rust-dark);
+  background: var(--rust);
+  box-shadow: 0 0 0 2px var(--rust-dark);
+}
+.photo-selected { display: none; }
+.photos .choice[aria-pressed="true"]:not(:disabled) .photo-selected {
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: var(--rust-dark);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 750;
+}
 .photo-placeholder { display: grid; place-items: center; width: 100%; aspect-ratio: 3 / 2; background: var(--map); }
 .landmark-photo { margin: 0 0 13px; }
 .landmark-photo img { display: block; width: 100%; height: auto; max-height: 285px; object-fit: contain; border-radius: 9px; background: #eeece0; }

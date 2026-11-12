@@ -229,10 +229,12 @@ const regionOptions = regions.map(region => ({
   aliases: [...(region.aliases ?? []), region.chinese, region.name + " " + region.type, ...(region.abbreviations ?? [])]
 }));
 
-function attachSearch(options, onGuess) {
+function attachSearch(options, guesses, onGuess) {
   const form = $("#search-form", panel);
   const input = $("#guess-input", form);
   const list = $("#suggestions", form);
+  const guessed = new Set(guesses);
+  const available = options.filter(option => !guessed.has(option.value));
   let shown = [];
   let active = -1;
   const terms = option => [option.label, ...(option.aliases ?? [])].map(normalize);
@@ -248,10 +250,11 @@ function attachSearch(options, onGuess) {
 
   function update() {
     const query = normalize(input.value);
-    shown = query ? options.filter(option => terms(option).some(term => term.includes(query))) : options;
-    shown = shown.sort((a, b) => Number(!normalize(a.label).startsWith(query)) - Number(!normalize(b.label).startsWith(query)) || a.label.localeCompare(b.label)).slice(0, 8);
+    shown = available.filter(option => !query || terms(option).some(term => term.includes(query)));
+    shown.sort((a, b) => Number(!normalize(a.label).startsWith(query)) - Number(!normalize(b.label).startsWith(query)) || a.label.localeCompare(b.label));
     active = -1;
     paintOptions();
+    list.scrollTop = 0;
   }
 
   function choose(index) {
@@ -265,6 +268,7 @@ function attachSearch(options, onGuess) {
   input.addEventListener("input", () => { $("#form-feedback", panel).textContent = ""; update(); });
   input.addEventListener("focus", update);
   input.addEventListener("keydown", event => {
+    if (event.isComposing) return;
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       if (!shown.length) update();
@@ -283,7 +287,9 @@ function attachSearch(options, onGuess) {
       paintOptions();
     }
   });
-  list.addEventListener("pointerdown", event => event.preventDefault());
+  list.addEventListener("pointerdown", event => {
+    if (event.target.closest("[data-option]")) event.preventDefault();
+  });
   list.addEventListener("click", event => {
     const option = event.target.closest("[data-option]");
     if (option) {
@@ -302,7 +308,11 @@ function attachSearch(options, onGuess) {
     event.preventDefault();
     const query = normalize(input.value);
     const exact = query ? options.find(option => terms(option).includes(query)) : undefined;
-    const match = exact ?? (shown.length === 1 ? shown[0] : undefined);
+    const match = exact ?? (query && shown.length === 1 ? shown[0] : undefined);
+    if (match && guessed.has(match.value)) {
+      $("#form-feedback", panel).textContent = "You already made that guess.";
+      return;
+    }
     if (!match) {
       $("#form-feedback", panel).textContent = query ? "Choose a matching name from the list." : "Enter a guess to continue.";
       input.focus();
@@ -344,8 +354,7 @@ function renderOutline() {
       <ol class="history-list">${Array.from({ length: 6 }, (_, index) => guessRow(game.guesses[index], index)).join("")}</ol>
     </section></div>`;
   if (!unlocked()) {
-    attachSearch(regionOptions, id => {
-      if (game.guesses.includes(id)) return "You already guessed that region.";
+    attachSearch(regionOptions, game.guesses, id => {
       game.guesses.push(id);
       save();
       const { kilometers, degrees } = geoBetween(byId.get(id), answer());

@@ -200,7 +200,7 @@ function choicesMarkup(task, state) {
     const right = state.status && choice.value === task.correct;
     const tried = state.incorrect?.includes(choice.value);
     return `<button type="button" class="choice${right ? " correct" : tried ? " wrong" : ""}" data-action="select" data-value="${escapeHtml(choice.value)}" aria-pressed="${state.selection === choice.value}"${state.status || tried ? " disabled" : ""}>
-      ${choice.art ?? `<span>${escapeHtml(choice.label)}</span>`}${right ? icon("check") : ""}</button>`;
+      ${choice.art ?? `<span>${escapeHtml(choice.label)}</span>`}${task.display === "photos" ? '<span class="photo-selected" aria-hidden="true">✓ Selected</span>' : ""}${right ? icon("check") : ""}</button>`;
   }).join("")}</div>`;
 }
 
@@ -310,8 +310,7 @@ function attachBonusSearch(task, state) {
     value: region.capital, label: region.capital, secondary: region.capitalChinese,
     aliases: [region.capitalChinese, ...(region.capitalAliases ?? [])]
   }));
-  attachSearch(options, value => {
-    if ((state.guesses ?? []).includes(value)) return "You already made that guess.";
+  attachSearch(options, state.guesses ?? [], value => {
     (state.guesses ??= []).push(value);
     if (task.kind === "neighbors" && task.correct.includes(value)) {
       (state.found ??= []).push(value);
