@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f6ef">
+  <meta name="description" content="Guess China’s province-level regions from their outlines and play the bonus geography rounds.">
+  <title>Provincele · China Geography Game</title>
+  <link rel="icon" href="./compass.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./data/provinces.js"></script>
+  <script defer src="./data/trivia.js"></script>
+  <script defer src="./data/languages.js"></script>
+  <script defer src="./data/history.js"></script>
+  <script defer src="./data/extras.js"></script>
+  <script defer src="./rounds.js"></script>
+  <script defer src="./game.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="brand" href="./" aria-label="Provincele home">
+        <img src="./compass.svg" width="35" height="35" alt="">
+        <span>Provincele<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="mode-switch" aria-label="Game mode">
+        <button type="button" id="daily-mode" aria-pressed="true">Daily</button>
+        <button type="button" id="practice-mode" aria-pressed="false">Practice</button>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" type="button" data-dialog="help" aria-label="How to play" title="How to play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.8 9a2.3 2.3 0 0 1 4.5.6c0 1.7-2.3 2-2.3 3.4M12 16.1h.01"/></svg></button>
+        <button class="icon-button" type="button" data-dialog="stats" aria-label="Statistics" title="Statistics"><svg viewBox="0 0 24 24"><path d="M4 19h16M7 16v-4m5 4V5m5 11V9"/></svg></button>
+        <button class="icon-button" type="button" data-dialog="settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.3" class="knob"/><circle cx="15" cy="17" r="2.3" class="knob"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <div class="eyebrow puzzle-label" id="puzzle-label"><span></span> Daily puzzle</div>
+        <h1 id="page-title">Guess the <em>province.</em></h1>
+        <p id="intro-copy">Identify the region from its outline in six guesses.</p>
+      </div>
+      <div id="date-label" class="date-label"></div>
+      <button type="button" id="new-practice" class="secondary-button" hidden>New outline <span aria-hidden="true">↻</span></button>
+    </section>
+
+    <div class="game-layout">
+      <section class="game-card" id="game-panel" aria-label="Current game round">
+        <p class="loading-message" id="loading">Loading province outlines…</p>
+      </section>
+      <aside class="sidebar" aria-label="Game rounds">
+        <section class="round-card">
+          <div class="round-card-header">
+            <h2>Rounds</h2>
+            <span id="round-count" class="round-count">0 / 1</span>
+          </div>
+          <div id="round-progress" class="round-progress" aria-hidden="true"></div>
+          <nav id="rounds" class="round-list" aria-label="Choose a round"></nav>
+          <p class="round-hint" id="round-hint">Finish the outline to unlock the bonus rounds.</p>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="footer">
+      <span>Provincele <span aria-hidden="true">·</span> China geography game</span>
+      <div>
+        <button type="button" data-dialog="help">How to play</button>
+        <button type="button" data-dialog="sources">Data &amp; credits</button>
+      </div>
+    </footer>
+  </main>
+
+  <dialog id="dialog">
+    <div class="dialog-heading">
+      <h2 id="dialog-title"></h2>
+      <form method="dialog"><button class="icon-button close-dialog" aria-label="Close" title="Close">×</button></form>
+    </div>
+    <div id="dialog-body"></div>
+  </dialog>
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+
+  <noscript><p class="no-script">Provincele needs JavaScript to load the map and check guesses.</p></noscript>
+</body>
+</html>
