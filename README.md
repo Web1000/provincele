@@ -2,7 +2,7 @@
 
 Provincele is a China geography game inspired by [Worldle](https://worldle.teuteuf.fr/). It includes 34 playable province-level geographies and a new daily puzzle at local midnight. Practice mode lets you play another outline at any time.
 
-![Provincele after a guess, with the mystery outline, distance, direction, and proximity](docs/guess-preview.png)
+![China by Shape daily puzzle in dark mode, showing the mystery outline and guess field](docs/guess-preview.png)
 
 ## Play locally
 
